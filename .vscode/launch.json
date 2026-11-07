@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "command": "npm start",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Ejecutar Proyecto React en localhost (Chrome)",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/frontend-react-productos"
+        }
+    ]
+}

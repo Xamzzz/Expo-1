@@ -1,0 +1,15 @@
+{
+  "name": "api-node-productos",
+  "version": "1.0.0",
+  "description": "API REST de Productos con Node.js y Express para conectar con el Frontend en React",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
+  }
+}
+

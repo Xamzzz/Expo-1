@@ -1,0 +1,12 @@
+{
+  "name": "expo-1-react-productos",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Proyecto Tema 5: Frontend con React + API Node.js",
+  "scripts": {
+    "dev": "node api-node-productos/iniciar.js",
+    "api": "node api-node-productos/server.js",
+    "build": "npm --prefix frontend-react-productos run build"
+  }
+}
+

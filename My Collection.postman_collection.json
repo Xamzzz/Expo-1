@@ -1,0 +1,98 @@
+{
+  "info": {
+    "_postman_id": "67d8c315-cf7d-4598-ab95-4b81c7d09c42",
+    "name": "API Productos - Node.js + Express (SENA ADSO)",
+    "description": "Colección con las 4 pruebas del CRUD de Productos (GET, POST, PUT, DELETE) sobre http://localhost:3000/productos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. GET - Listar Productos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/productos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["productos"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. POST - Crear Producto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Silla Gamer Ergonómica\",\n  \"precio\": 480000,\n  \"cantidad\": 6\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/productos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["productos"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. PUT - Actualizar Producto",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Teclado Mecánico RGB Pro\",\n  \"precio\": 199000,\n  \"cantidad\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/productos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["productos", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. DELETE - Eliminar Producto",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/productos/4",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["productos", "4"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
