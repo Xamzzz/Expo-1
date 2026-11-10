@@ -1,15 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * Componente 2: FormularioProducto
- * Maneja el estado local de las cajas de texto (nombre, precio, cantidad) con useState
- * y envía el nuevo producto al componente padre (App) mediante la prop onAgregarProducto.
+ * Maneja el estado local de las cajas de texto (nombre, precio, cantidad) con useState.
+ * Permite tanto CREAR un producto nuevo (POST) como ACTUALIZAR uno existente (PUT) de la API.
  */
-function FormularioProducto({ onAgregarProducto }) {
+function FormularioProducto({
+  onAgregarProducto,
+  onActualizarProducto,
+  productoEditando,
+  onCancelarEdicion,
+}) {
   // Estados locales para los campos del formulario
   const [nombre, setNombre] = useState('');
   const [precio, setPrecio] = useState('');
   const [cantidad, setCantidad] = useState('');
+
+  // Si el usuario selecciona un producto para editar, cargamos sus datos en las cajas de texto
+  useEffect(() => {
+    if (productoEditando) {
+      setNombre(productoEditando.nombre);
+      setPrecio(String(productoEditando.precio));
+      setCantidad(String(productoEditando.cantidad));
+    } else {
+      setNombre('');
+      setPrecio('');
+      setCantidad('');
+    }
+  }, [productoEditando]);
 
   const manejarEnvio = (evento) => {
     // Evita que el navegador recargue la página
@@ -20,12 +38,19 @@ function FormularioProducto({ onAgregarProducto }) {
       return;
     }
 
-    // Enviamos el objeto con el nuevo producto al componente padre (App)
-    onAgregarProducto({
+    const datosProducto = {
       nombre: nombre.trim(),
       precio: Number(precio),
       cantidad: Number(cantidad),
-    });
+    };
+
+    if (productoEditando) {
+      // Ejecuta el endpoint PUT /productos/{id}
+      onActualizarProducto(productoEditando.id, datosProducto);
+    } else {
+      // Ejecuta el endpoint POST /productos
+      onAgregarProducto(datosProducto);
+    }
 
     // Limpiamos las cajas de texto después de guardar
     setNombre('');
@@ -35,9 +60,17 @@ function FormularioProducto({ onAgregarProducto }) {
 
   return (
     <section className="tarjeta">
-      <h2>➕ Agregar Producto</h2>
+      <h2>{productoEditando ? `✏️ Editar Producto #${productoEditando.id}` : '➕ Agregar Producto'}</h2>
       <p className="descripcion-seccion">
-        Componente <code>FormularioProducto.jsx</code> — Enlazado con <code>useState</code>.
+        {productoEditando ? (
+          <>
+            Consumiendo endpoint <code>PUT /productos/{productoEditando.id}</code>
+          </>
+        ) : (
+          <>
+            Consumiendo endpoint <code>POST /productos</code> con <code>useState</code>
+          </>
+        )}
       </p>
 
       <form onSubmit={manejarEnvio} className="formulario">
@@ -76,13 +109,24 @@ function FormularioProducto({ onAgregarProducto }) {
           />
         </label>
 
-        <button type="submit" className="btn-guardar">
-          💾 Guardar Producto
-        </button>
+        <div className="botones-formulario">
+          <button type="submit" className="btn-guardar">
+            {productoEditando ? '💾 Actualizar Producto (PUT)' : '💾 Guardar Producto (POST)'}
+          </button>
+
+          {productoEditando && (
+            <button
+              type="button"
+              className="btn-cancelar-edicion"
+              onClick={onCancelarEdicion}
+            >
+              ❌ Cancelar
+            </button>
+          )}
+        </div>
       </form>
     </section>
   );
 }
 
 export default FormularioProducto;
-

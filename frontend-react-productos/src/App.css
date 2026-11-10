@@ -86,6 +86,15 @@ body.tema-oscuro {
   color: #bfdbfe;
 }
 
+.tema-oscuro .btn-editar {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+.tema-oscuro .btn-editar:hover {
+  background-color: rgba(59, 130, 246, 0.35);
+}
+
 .tema-oscuro .btn-eliminar {
   background-color: rgba(239, 68, 68, 0.2);
   color: #fca5a5;
@@ -333,6 +342,13 @@ body.tema-oscuro {
   border-color: #2563eb;
 }
 
+.botones-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .btn-guardar {
   background: #16a34a;
   color: white;
@@ -342,11 +358,25 @@ body.tema-oscuro {
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 4px;
 }
 
 .btn-guardar:hover {
   background: #15803d;
+}
+
+.btn-cancelar-edicion {
+  background: #64748b;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-cancelar-edicion:hover {
+  background: #475569;
 }
 
 .cabecera-tabla {
@@ -424,7 +454,7 @@ body.tema-oscuro {
   padding-top: 8px;
   border-top: 1px solid rgba(148, 163, 184, 0.2);
   display: flex;
-  justify-content: flex-end;
+  gap: 8px;
 }
 
 .id-pill {
@@ -445,12 +475,29 @@ body.tema-oscuro {
   font-weight: 600;
 }
 
+.btn-editar {
+  flex: 1;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-editar:hover {
+  background: #bfdbfe;
+}
+
 .btn-eliminar {
-  width: 100%;
+  flex: 1;
   background: #fee2e2;
   color: #b91c1c;
   border: none;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;

@@ -1,13 +1,13 @@
 /**
  * Componente 3: ListaProductos
- * Recibe el arreglo de productos por props y los muestra en tarjetas individuales usando .map().
+ * Recibe el arreglo de productos (GET) y permite seleccionarlos para editar (PUT) o eliminar (DELETE).
  */
-function ListaProductos({ productos, onEliminarProducto }) {
+function ListaProductos({ productos, onSeleccionarEditar, onEliminarProducto }) {
   return (
     <section className="tarjeta">
       <div className="cabecera-tabla">
         <h2>📋 Catálogo de Productos ({productos.length})</h2>
-        <span className="etiqueta-codigo">Componente ListaProductos.jsx</span>
+        <span className="etiqueta-codigo">GET · PUT · DELETE /productos</span>
       </div>
 
       {productos.length === 0 ? (
@@ -30,11 +30,19 @@ function ListaProductos({ productos, onEliminarProducto }) {
               <div className="tarjeta-producto-acciones">
                 <button
                   type="button"
+                  className="btn-editar"
+                  onClick={() => onSeleccionarEditar(prod)}
+                  title="Editar este producto (PUT)"
+                >
+                  ✏️ Editar
+                </button>
+                <button
+                  type="button"
                   className="btn-eliminar"
                   onClick={() => onEliminarProducto(prod.id)}
-                  title="Eliminar producto"
+                  title="Eliminar este producto (DELETE)"
                 >
-                  🗑️ Eliminar producto
+                  🗑️ Eliminar
                 </button>
               </div>
             </article>

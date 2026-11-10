@@ -1,98 +1,196 @@
 {
   "info": {
     "_postman_id": "67d8c315-cf7d-4598-ab95-4b81c7d09c42",
-    "name": "API Productos - Node.js + Express (SENA ADSO)",
-    "description": "Colección con las 4 pruebas del CRUD de Productos (GET, POST, PUT, DELETE) sobre http://localhost:3000/productos",
+    "name": "API Productos - Tema 1 (Spring Boot :8080) y Tema 3 (Node.js :3000)",
+    "description": "Colección con las 4 pruebas del CRUD de Productos (GET, POST, PUT, DELETE) para Tema 1 (http://localhost:8080/productos) y Tema 3 (http://localhost:3000/productos)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "1. GET - Listar Productos",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/productos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["productos"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "2. POST - Crear Producto",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Silla Gamer Ergonómica\",\n  \"precio\": 480000,\n  \"cantidad\": 6\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Tema 1 - API Spring Boot (localhost:8080)",
+      "item": [
+        {
+          "name": "1. GET - Listar Productos (Spring Boot)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["productos"]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:3000/productos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["productos"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "3. PUT - Actualizar Producto",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Teclado Mecánico RGB Pro\",\n  \"precio\": 199000,\n  \"cantidad\": 10\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+        {
+          "name": "2. POST - Crear Producto (Spring Boot)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Silla Gamer Ergonómica\",\n  \"precio\": 480000,\n  \"cantidad\": 6\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["productos"]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:3000/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["productos", "1"]
+        {
+          "name": "3. PUT - Actualizar Producto (Spring Boot)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Teclado Mecánico RGB Pro\",\n  \"precio\": 199000,\n  \"cantidad\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/productos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["productos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. DELETE - Eliminar Producto (Spring Boot)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/productos/4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["productos", "4"]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "4. DELETE - Eliminar Producto",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/productos/4",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
-          "path": ["productos", "4"]
+      "name": "Tema 3 - API Node.js + Express (localhost:3000)",
+      "item": [
+        {
+          "name": "1. GET - Listar Productos (Node.js)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["productos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. POST - Crear Producto (Node.js)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Webcam Full HD 1080p\",\n  \"precio\": 135000,\n  \"cantidad\": 18\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["productos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. PUT - Actualizar Producto (Node.js)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Teclado Mecánico RGB Pro\",\n  \"precio\": 199000,\n  \"cantidad\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/productos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["productos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. DELETE - Eliminar Producto (Node.js)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/productos/4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["productos", "4"]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     }
   ]
 }

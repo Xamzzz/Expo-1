@@ -5,30 +5,26 @@ import FormularioProducto from './components/FormularioProducto.jsx';
 import ListaProductos from './components/ListaProductos.jsx';
 import './App.css';
 
-// URL por defecto de la API (Puerto 3000 para Node.js/Express - Tema 3, o 8080 para Spring Boot - Tema 1)
-const API_URL_DEFAULT = 'http://localhost:3000/productos';
-
-// Datos de respaldo automáticos si la API no está encendida en el momento de la prueba
-const PRODUCTOS_RESPALDO = [
-  { id: 1, nombre: 'Teclado Mecánico RGB', precio: 185000, cantidad: 12 },
-  { id: 2, nombre: 'Mouse Inalámbrico Gamer', precio: 95000, cantidad: 25 },
-  { id: 3, nombre: 'Monitor IPS 24 Pulgadas', precio: 620000, cantidad: 8 },
-  { id: 4, nombre: 'Diadema USB con Micrófono', precio: 140000, cantidad: 15 },
-];
+// URL por defecto apuntando al Tema 1: API REST conectada a Base de Datos SQL (puerto 8080)
+const API_URL_DEFAULT = 'http://localhost:8080/productos';
 
 /**
  * Componente Principal: App
- * - Guarda la lista de productos y el estado del modo oscuro con useState.
- * - Consulta y sincroniza en tiempo real con la API REST usando useEffect.
- * - Une y coordina los componentes hijos pasándoles datos y funciones por props.
+ * Consume los 4 endpoints del CRUD del Tema 1 (Con Base de Datos SQL - puerto 8080)
+ * y Tema 3 (En Memoria - puerto 3000), sin ningún dato quemado en memoria en el Frontend:
+ * 1. GET    /productos      -> SELECT de la Base de Datos (useEffect)
+ * 2. POST   /productos      -> INSERT en la Base de Datos
+ * 3. PUT    /productos/{id} -> UPDATE en la Base de Datos
+ * 4. DELETE /productos/{id} -> DELETE en la Base de Datos
  */
 function App() {
-  // 1. ESTADOS PRINCIPALES (useState)
+  // 1. ESTADOS PRINCIPALES (useState) -> Inicia vacío, se llena desde la Base de Datos
   const [productos, setProductos] = useState([]);
+  const [productoEditando, setProductoEditando] = useState(null);
   const [modoOscuro, setModoOscuro] = useState(false);
   const [apiUrl, setApiUrl] = useState(API_URL_DEFAULT);
   const [conectadoApi, setConectadoApi] = useState(false);
-  const [mensajeEstado, setMensajeEstado] = useState('Verificando conexión con API...');
+  const [mensajeEstado, setMensajeEstado] = useState('Conectando a la Base de Datos...');
 
   // Función para activar o desactivar el modo oscuro
   const alternarModoOscuro = () => {
@@ -37,8 +33,7 @@ function App() {
     document.body.classList.toggle('tema-oscuro', nuevoModo);
   };
 
-  // 2. EFECTO (useEffect) -> Trae los productos al iniciar y sincroniza en vivo cada 1.5 segundos
-  // Así, si se envía un POST/PUT/DELETE desde Postman, aparece en pantalla sin recargar la página.
+  // 2. EFECTO (useEffect) -> Consulta la Base de Datos al iniciar y sincroniza en vivo cada 1.5s
   useEffect(() => {
     obtenerProductos(apiUrl);
 
@@ -49,7 +44,7 @@ function App() {
     return () => clearInterval(intervaloSincronizacion);
   }, [apiUrl]);
 
-  // Función para pedir la lista de productos (GET)
+  // ENDPOINT 1: GET /productos -> Consultar registros desde la API / Base de Datos
   const obtenerProductos = async (urlDestino, silencioso = false) => {
     try {
       const respuesta = await fetch(urlDestino, { cache: 'no-store' });
@@ -57,19 +52,21 @@ function App() {
       const datos = await respuesta.json();
       setProductos(datos);
       setConectadoApi(true);
-      setMensajeEstado(`Conectado en vivo a ${urlDestino}`);
+      const tipoAlmacenamiento = urlDestino.includes('8080')
+        ? 'MySQL Workbench (db_inventario.producto - :8080)'
+        : 'Lista en Memoria (Tema 3 - :3000)';
+      setMensajeEstado(`Conectado a ${tipoAlmacenamiento}`);
     } catch (error) {
-      // Si la API local no está encendida, usamos los datos de respaldo automáticamente
       if (!silencioso) {
-        console.warn('API no detectada, activando datos de respaldo:', error.message);
-        setProductos((prev) => (prev.length > 0 ? prev : PRODUCTOS_RESPALDO));
+        console.error('No se pudo conectar con la API:', error.message);
+        setProductos([]);
       }
       setConectadoApi(false);
-      setMensajeEstado('Modo Local Activo (Datos de respaldo automáticos)');
+      setMensajeEstado('API desconectada (Ejecuta npm run dev)');
     }
   };
 
-  // Función que recibe el nuevo producto desde <FormularioProducto /> y lo guarda (POST)
+  // ENDPOINT 2: POST /productos -> Insertar un producto nuevo en la Base de Datos
   const agregarProducto = async (nuevoProducto) => {
     try {
       const respuesta = await fetch(apiUrl, {
@@ -78,43 +75,64 @@ function App() {
         body: JSON.stringify(nuevoProducto),
       });
 
-      if (!respuesta.ok) throw new Error('No se pudo guardar en la API');
+      if (!respuesta.ok) throw new Error('No se pudo guardar en la Base de Datos');
       const productoCreado = await respuesta.json();
 
-      // Actualizamos el estado inmediatamente sin recargar la página
+      // Actualizamos el estado con el registro real insertado en la Base de Datos
       setProductos((prevProductos) => [...prevProductos, productoCreado]);
     } catch (error) {
-      // Si estamos en modo local (sin API), asignamos un ID consecutivo en memoria
-      setProductos((prevProductos) => {
-        const siguienteId =
-          prevProductos.length > 0
-            ? Math.max(...prevProductos.map((p) => Number(p.id) || 0)) + 1
-            : 1;
-
-        return [...prevProductos, { id: siguienteId, ...nuevoProducto }];
-      });
+      alert('Error al guardar en la API: verifica que el servidor esté encendido.');
     }
   };
 
-  // Función para eliminar un producto desde <ListaProductos /> (DELETE)
+  // ENDPOINT 3: PUT /productos/{id} -> Actualizar un producto en la Base de Datos
+  const actualizarProducto = async (id, datosActualizados) => {
+    try {
+      const respuesta = await fetch(`${apiUrl}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, ...datosActualizados }),
+      });
+
+      if (!respuesta.ok) throw new Error('No se pudo actualizar en la Base de Datos');
+      const productoActualizado = await respuesta.json();
+
+      setProductos((prevProductos) =>
+        prevProductos.map((prod) => (prod.id === id ? productoActualizado : prod))
+      );
+      setProductoEditando(null);
+    } catch (error) {
+      alert('Error al actualizar el producto en la Base de Datos.');
+    }
+  };
+
+  // ENDPOINT 4: DELETE /productos/{id} -> Eliminar un producto de la Base de Datos
   const eliminarProducto = async (id) => {
     try {
-      await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+      const respuesta = await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+      if (!respuesta.ok) throw new Error('No se pudo eliminar de la Base de Datos');
+
+      setProductos((prevProductos) => prevProductos.filter((prod) => prod.id !== id));
+      if (productoEditando && productoEditando.id === id) {
+        setProductoEditando(null);
+      }
     } catch (error) {
-      // Ignoramos error de red si estamos en modo respaldo
+      alert('Error al eliminar el producto de la Base de Datos.');
     }
-    setProductos((prevProductos) => prevProductos.filter((prod) => prod.id !== id));
   };
 
   // 3. COMPOSICIÓN DE COMPONENTES (JSX)
   return (
     <div className={`contenedor ${modoOscuro ? 'tema-oscuro' : ''}`}>
-      {/* Componente 1: Encabezado, botón de modo oscuro y estado de la API */}
+      {/* Componente 1: Encabezado, botón de modo oscuro y selector de API (Tema 1 BD / Tema 3 Memoria) */}
       <Encabezado
         conectadoApi={conectadoApi}
         mensajeEstado={mensajeEstado}
         apiUrl={apiUrl}
-        onCambiarApi={setApiUrl}
+        onCambiarApi={(nuevaUrl) => {
+          setProductoEditando(null);
+          setApiUrl(nuevaUrl);
+        }}
         onReconectar={() => obtenerProductos(apiUrl)}
         modoOscuro={modoOscuro}
         onAlternarModoOscuro={alternarModoOscuro}
@@ -125,12 +143,18 @@ function App() {
 
       {/* Contenedor principal con los dos componentes del CRUD */}
       <div className="grid-principal">
-        {/* Componente 3: Formulario para crear un producto */}
-        <FormularioProducto onAgregarProducto={agregarProducto} />
+        {/* Componente 3: Formulario para crear (POST) o actualizar (PUT) un producto */}
+        <FormularioProducto
+          onAgregarProducto={agregarProducto}
+          onActualizarProducto={actualizarProducto}
+          productoEditando={productoEditando}
+          onCancelarEdicion={() => setProductoEditando(null)}
+        />
 
-        {/* Componente 4: Catálogo de productos en tarjetas */}
+        {/* Componente 4: Catálogo de productos en tarjetas (GET, PUT y DELETE) */}
         <ListaProductos
           productos={productos}
+          onSeleccionarEditar={(producto) => setProductoEditando(producto)}
           onEliminarProducto={eliminarProducto}
         />
       </div>
